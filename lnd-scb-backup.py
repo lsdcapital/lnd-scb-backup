@@ -53,8 +53,11 @@ def upload_to_bucket(blob_name, path_to_file, bucket_name):
     #returns a public url
     return blob.public_url
 
-if __name__ == "__main__":
+def main():
     getConfig()
     listen()
-#    backupChannel()
+    backupChannel()
+
+if __name__ == "__main__":
+    main()
 

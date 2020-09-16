@@ -7,5 +7,7 @@ name = "pypi"
 grpcio = "*"
 grpcio-tools = "*"
 googleapis-common-protos = "*"
+str2bool = "*"
+google-cloud-storage = "*"
 
 [dev-packages]

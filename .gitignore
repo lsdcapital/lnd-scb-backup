@@ -5,3 +5,4 @@ rpc_pb2.py
 rpc_pb2_grpc.py
 .vscode
 __pycache__
+creds.json

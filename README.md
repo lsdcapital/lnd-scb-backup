@@ -1,17 +1,19 @@
 # LND SCB Backup
 
-As of lnd v0.6-beta, a new feaute called Static Channel Backups (SCB) was implemented. This static backup is needed for the Data Loss Protection (DLP) feature.  
+As of lnd v0.6-beta, a new feaute called Static Channel Backups (SCB) was implemented. This static backup is needed for the Data Loss Protection (DLP) feature.
+
 For a node recovery you need
 - Your wallet seed (people often back this up)
 - Your latest SCB (people forget about this, and it contains all the channel information)
 
 See the offical [LND Recovery Guide](https://github.com/lightningnetwork/lnd/blob/master/docs/recovery.md) here.
 
-LND safely writes a SCB for us, which we need to backup. Alex Bosworth made a great [LND SCB backup](https://gist.github.com/alexbosworth/2c5e185aedbdac45a03655b709e255a3) script which used inotify-tools to watch for an update.  
+LND safely writes a SCB for us, which we need to backup. Alex Bosworth made a great [LND SCB backup](https://gist.github.com/alexbosworth/2c5e185aedbdac45a03655b709e255a3) script which used inotify-tools to watch for an update.
+
 I wanted to run my node on Kubernetes (GKE) and ensure I had a backup of the channel file and inotify under K8 isnt a good solution.
 
 LND SCB Backup (lnd-scb-backup) is a python script that connects and subscribes to LND gRPC ChannelBackupSubscription() where it listens for any updates to the ChannelBackup.
-When receiving an update it writes a the binary multiChanBackup file to a backend provider.
+When receiving an update it writes the binary multiChanBackup file to a backend provider.
 
 Current providers are
 - file
@@ -19,28 +21,24 @@ Current providers are
 
 You can run multiple providers at the same time if you like.
 
-# Installation
+## Installation
 pipenv install  
 pipenv shell  
 ./compile_proto.sh  
 
-# Edit lnd-scb-backup.conf
+### Edit lnd-scb-backup.conf
 Edit the lnd-scb-backup.conf file
 
 Current backup methods are: (you can have multiple, seperated by a comma)  
 method=file,bucket
 
-# File
-# Google Bucket
-https://console.cloud.google.com/storage/browser/[bucket-id]/
-
-# TODO
+## TODO
 By default we look for a config file lnd-scb-backup.conf. Implement command line args to specify this file  
 File: Implement max amount of files for rotation  
 AWS: Yeah  
 Write the backup verify function (and veryify) on a backup. (I've verified manually, it seems ok)  
 Create a Docker build and related K8s files
 
-# Notes
+## Notes
 This package was required to pipenv install google-cloud-storage on a RPI 64  
 apt-get install libffi-dev

@@ -1,19 +1,20 @@
+import codecs
+import configparser
 import datetime
+import grpc
+import logging
 import os
 import rpc_pb2 as ln
 import rpc_pb2_grpc as lnrpc
-import codecs
-import configparser
-import grpc
+import sys
 import time
 
-from str2bool import str2bool
+from base64 import b64decode
 from google.cloud import storage
 from google.protobuf.json_format import MessageToDict
-from base64 import b64decode
+from str2bool import str2bool
 
 def getConfig(conf='lnd-scb-backup.conf', section='backup'):
-
     config = configparser.ConfigParser()
     config.read(conf)
     return {k:v for k, v in config[section].items()}
@@ -34,8 +35,7 @@ def connect():
 
     # Simple test to query WalletBalance (There is probably a better test)
     if stub.WalletBalance(ln.WalletBalanceRequest(), metadata=[('macaroon', macaroon)]):
-        print(f'Connection to LND on {config["lndrpchost"]}:{config["lndrpcport"]} successful')
-        # print(response.total_balance)
+        logger.info(f'Connection to LND on {config["lndrpchost"]}:{config["lndrpcport"]} successful')
 
     return stub, macaroon
 
@@ -45,7 +45,7 @@ def subscribe(connection, macaroon):
     stub = connection
     request = ln.ChannelBackupSubscription()
 
-    print("Subscribing to and waiting for LND multiChanBackup updates")
+    logger.info("Subscribing to and waiting for LND multiChanBackup updates")
     if not str2bool(config['test']):
         for response in stub.SubscribeChannelBackups(request, metadata=[('macaroon', macaroon)]):
             json_out = MessageToDict(response, including_default_value_fields=True)
@@ -56,12 +56,11 @@ def subscribe(connection, macaroon):
             # hex = decode.hex()
             # print(hex)
     else:
-        print('WARN: Running in test mode (test=true) and simulating a multichanbackup binary write')
+        logger.warning('Running in test mode (test=true) and simulating a multichanbackup binary write')
         backupChannel(b'abc123')
         time.sleep(10)
 
 def backupChannel(multiChanBackup):
-
     config = getConfig()
 
     date = datetime.datetime.now()
@@ -72,12 +71,12 @@ def backupChannel(multiChanBackup):
             cfg = getConfig(section='file')
             filename = cfg['filepath'] + '/' + cfg['filename'] + '-' + datefile + '.backup'
             if not os.path.exists(cfg['filepath']):
-                print(f'ERR: Backup filepath {cfg["filepath"]} does not exist. Attemping to create.')
+                logger.error(f'ERR: Backup filepath {cfg["filepath"]} does not exist. Attemping to create.')
                 os.makedirs(cfg['filepath'])
 
             with open(filename, "wb") as file:
                 file.write(multiChanBackup)
-            print(f'Created multiChanBackup to file {filename}')
+            logger.info(f'Created multiChanBackup to file {filename}')
 
         elif method == 'bucket':
             cfg = getConfig(section='bucket')
@@ -86,11 +85,11 @@ def backupChannel(multiChanBackup):
             try:
                 bucket = storage_client.get_bucket(cfg['bucket'])
             except:
-                print('ERR: Failed to find Google Bucket')
-                print('INFO: Known buckets are:')
+                logger.error('Failed to find Google Bucket')
+                logger.error('Known buckets are:')
                 buckets = storage_client.list_buckets()
                 for bucket in buckets:
-                    print(bucket.name)
+                    logger.error(bucket.name)
 
             # Create tempory file for upload
             filename = cfg['filename'] + '-' + datefile + '.backup'
@@ -99,17 +98,33 @@ def backupChannel(multiChanBackup):
             
             blob = bucket.blob(filename)
             blob.upload_from_filename(filename)
-            print(f'Created multiChanBackup on Google Bucket: ' + blob.public_url)
+            logger.info(f'Created multiChanBackup on Google Bucket: ' + blob.public_url)
             os.remove(filename)
         else:
-            print('No backup methods specified')
+            logger.error('No backup methods specified')
 
 def verifyBackup():
     #TODO
     ''' Function to verify backup by passing the filename to "lncli verifychanbackup --multi_file filename" '''
     pass
 
+#Global logging defintion
+config = getConfig()
+logger = logging.getLogger()
+loglevel = config['loglevel'].upper()
+logfile = config['logfile']
+
+logger.setLevel(loglevel)
+formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(name)s: %(message)s')
+fh = logging.FileHandler(logfile)
+sh = logging.StreamHandler(sys.stdout)
+fh.setFormatter(formatter)
+sh.setFormatter(formatter)
+logger.addHandler(fh)
+logger.addHandler(sh)
+
 def main():
+    logger.info('Application Started')
     connection, macaroon = connect()
     while True:
         subscribe(connection, macaroon)

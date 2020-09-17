@@ -7,3 +7,4 @@ rpc_pb2_grpc.py
 __pycache__
 creds.json
 venv
+k8-unsafe

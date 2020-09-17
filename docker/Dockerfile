@@ -33,5 +33,4 @@ RUN apt-get install -y --no-install-recommends git curl && \
   apt-get remove -y git && \
   apt-get autoremove -y
 
-CMD ["python", "lnd-scb-backup.py"]
-
+CMD ["python", "-u", "lnd-scb-backup.py"]

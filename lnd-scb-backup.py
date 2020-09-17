@@ -71,7 +71,7 @@ def backupChannel(multiChanBackup):
             cfg = getConfig(section='file')
             filename = cfg['filepath'] + '/' + cfg['filename'] + '-' + datefile + '.backup'
             if not os.path.exists(cfg['filepath']):
-                logger.error(f'ERR: Backup filepath {cfg["filepath"]} does not exist. Attemping to create.')
+                logger.error(f'Backup filepath {cfg["filepath"]} does not exist. Attemping to create.')
                 os.makedirs(cfg['filepath'])
 
             with open(filename, "wb") as file:

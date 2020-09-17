@@ -37,8 +37,6 @@ By default we look for a config file lnd-scb-backup.conf. Implement command line
 File: Implement max amount of files for rotation  
 AWS: Yeah  
 Write the backup verify function (and veryify) on a backup. (I've verified manually, it seems ok)  
-Create a Docker build and related K8s files
-Implement python logging to properly log to stdout and file (currently cheating in K8 python -u for unbuffered to get stdout)
 
 ## Notes
 This package was required to pipenv install google-cloud-storage on a RPI 64  

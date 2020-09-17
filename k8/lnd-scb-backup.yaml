@@ -53,7 +53,7 @@ spec:
         name: lnd-scb-backup
         workingDir: /app
         command: ['/usr/local/bin/python']
-        args: ['-u', 'lnd-scb-backup.py']
+        args: ['lnd-scb-backup.py']
         # command: ['sleep']
         # args: ['infinity']
         volumeMounts:

@@ -1,9 +1,9 @@
 #!/bin/bash 
 
 # Cleanup
-rm rpc.proto
-rm rpc_pb2.py
-rm rpc_pb2_grpc.py 
+rm -f rpc.proto
+rm -f rpc_pb2.py
+rm -f rpc_pb2_grpc.py
 
 if [ -d googleapis ]
 then

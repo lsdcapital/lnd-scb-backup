@@ -9,6 +9,8 @@ data:
     lndrpcport=10009
     method=file,bucket
     test=0
+    loglevel=info
+    logfile=lnd-scb-backup.log
 
     [file]
     filepath = /app/backup
@@ -47,11 +49,11 @@ spec:
         app: lnd-scb-backup
     spec:
       containers:
-      - image: lsdopen/lnd-scb-backup:v0.1-alpha
+      - image: lsdopen/lnd-scb-backup:v0.2-alpha
         name: lnd-scb-backup
         workingDir: /app
         command: ['/usr/local/bin/python']
-        args: ['-u', 'lnd-scb-backup.py']
+        args: ['lnd-scb-backup.py']
         # command: ['sleep']
         # args: ['infinity']
         volumeMounts:

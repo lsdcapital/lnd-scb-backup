@@ -1,6 +1,6 @@
 # LND SCB Backup
 
-As of lnd v0.6-beta, a new feaute called Static Channel Backups (SCB) was implemented. This static backup is needed for the Data Loss Protection (DLP) feature.
+As of lnd v0.6-beta, a new feature called Static Channel Backups (SCB) was implemented. This static backup is needed for the Data Loss Protection (DLP) feature.
 
 For a node recovery you need
 - Your wallet seed (people often back this up)

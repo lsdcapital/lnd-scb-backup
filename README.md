@@ -8,7 +8,7 @@ For a node recovery you need
 
 See the offical [LND Recovery Guide](https://github.com/lightningnetwork/lnd/blob/master/docs/recovery.md) here.
 
-LND safely writes a SCB for us, which we need to backup. Alex Bosworth made a great [LND SCB backup](https://gist.github.com/alexbosworth/2c5e185aedbdac45a03655b709e255a3) script which used inotify-tools to watch for an update.
+LND safely writes a SCB for us, which we need to backup. Alex Bosworth made a great [LND SCB backup](https://gist.github.com/alexbosworth/2c5e185aedbdac45a03655b709e255a3) script which used inotify-tools to watch for an update. If you are running LND in a VM this is a great option.
 
 I wanted to run my node on Kubernetes (GKE) and ensure I had a backup of the channel file and inotify under K8 isnt a good solution.
 
@@ -38,6 +38,7 @@ File: Implement max amount of files for rotation
 AWS: Yeah  
 Write the backup verify function (and veryify) on a backup. (I've verified manually, it seems ok)  
 Create a Docker build and related K8s files
+Implement python logging to properly log to stdout and file (currently cheating in K8 python -u for unbuffered to get stdout)
 
 ## Notes
 This package was required to pipenv install google-cloud-storage on a RPI 64  

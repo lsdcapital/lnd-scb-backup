@@ -1,16 +1,17 @@
+import codecs
+import configparser
 import datetime
+import grpc
+import logging
 import os
 import rpc_pb2 as ln
 import rpc_pb2_grpc as lnrpc
-import codecs
-import configparser
-import grpc
 import time
 
-from str2bool import str2bool
+from base64 import b64decode
 from google.cloud import storage
 from google.protobuf.json_format import MessageToDict
-from base64 import b64decode
+from str2bool import str2bool
 
 def getConfig(conf='lnd-scb-backup.conf', section='backup'):
 

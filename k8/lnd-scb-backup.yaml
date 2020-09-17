@@ -47,7 +47,7 @@ spec:
         app: lnd-scb-backup
     spec:
       containers:
-      - image: lsdopen/lnd-scb-backup:v0.1-alpha
+      - image: lsdopen/lnd-scb-backup:v0.2-alpha
         name: lnd-scb-backup
         workingDir: /app
         command: ['/usr/local/bin/python']

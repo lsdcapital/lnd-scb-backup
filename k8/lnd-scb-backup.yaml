@@ -8,7 +8,7 @@ data:
     lndrpchost=lnd-clusterip
     lndrpcport=10009
     method=file,bucket
-    test=1
+    test=0
     loglevel=info
     logfile=lnd-scb-backup.log
 

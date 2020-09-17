@@ -72,9 +72,8 @@ def backupChannel(multiChanBackup):
             cfg = getConfig(section='file')
             filename = cfg['filepath'] + '/' + cfg['filename'] + '-' + datefile + '.backup'
             if not os.path.exists(cfg['filepath']):
-                #os.makedirs(cfg['filepath'])
-                print(f'ERR: Backup filepath {cfg["filepath"]} does not exist')
-                exit()
+                print(f'ERR: Backup filepath {cfg["filepath"]} does not exist. Attemping to create.')
+                os.makedirs(cfg['filepath'])
 
             with open(filename, "wb") as file:
                 file.write(multiChanBackup)
@@ -92,7 +91,6 @@ def backupChannel(multiChanBackup):
                 buckets = storage_client.list_buckets()
                 for bucket in buckets:
                     print(bucket.name)
-                exit()
 
             # Create tempory file for upload
             filename = cfg['filename'] + '-' + datefile + '.backup'

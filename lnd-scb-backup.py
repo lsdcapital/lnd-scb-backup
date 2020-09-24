@@ -22,7 +22,7 @@ def getConfig(conf='lnd-scb-backup.conf', section='backup'):
 def connect():
     config = getConfig()
 
-    with open(config['adminmacaroonpath'], 'rb') as f:
+    with open(config['readonlymacaroonpath'], 'rb') as f:
         macaroon_bytes = f.read()
         macaroon = codecs.encode(macaroon_bytes, 'hex')
 

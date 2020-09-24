@@ -1,5 +1,7 @@
 # LND SCB Backup
 
+tl;dr - Docker / Kubernetes container that listens for updates to the LND Single Channel Backup (SCB) and saves it to either filesystem or a google bucket
+
 As of lnd v0.6-beta, a new feature called Static Channel Backups (SCB) was implemented. This static backup is needed for the Data Loss Protection (DLP) feature.
 
 For a node recovery you need

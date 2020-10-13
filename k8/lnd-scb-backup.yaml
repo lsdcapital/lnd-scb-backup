@@ -3,7 +3,7 @@ data:
   lnd-scb-backup.conf: |
     [backup]
     datadir=./
-    adminmacaroonpath=/app/admin.macaroon
+    readonlymacaroonpath=/app/readonly.macaroon
     tlscertpath=/app/tls.cert
     lndrpchost=lnd-clusterip
     lndrpcport=10009
@@ -60,9 +60,9 @@ spec:
         - mountPath: '/app/lnd-scb-backup.conf'
           subPath: "lnd-scb-backup.conf"
           name: lnd-scb-backup-config
-        - name: lnd-admin-macaroon
-          subPath: "admin.macaroon"
-          mountPath: "/app/admin.macaroon"
+        - name: lnd-readonly-macaroon
+          subPath: "readonly.macaroon"
+          mountPath: "/app/readonly.macaroon"
           readOnly: true
         - name: lnd-tls-cert
           subPath: "tls.cert"
@@ -77,7 +77,7 @@ spec:
           defaultMode: 0420
           name: lnd-scb-backup-config
         name: lnd-scb-backup-config
-      - name: lnd-admin-macaroon
+      - name: lnd-readonly-macaroon
         secret:
           secretName: lnd-scb-backup
       - name: lnd-tls-cert

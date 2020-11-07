@@ -5,7 +5,7 @@ data:
     datadir=./
     readonlymacaroonpath=/app/readonly.macaroon
     tlscertpath=/app/tls.cert
-    lndrpchost=lnd-clusterip
+    lndrpchost=lnd
     lndrpcport=10009
     method=file,bucket
     test=0

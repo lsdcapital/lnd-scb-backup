@@ -2,7 +2,7 @@ FROM python:3.8-slim-buster
 
 LABEL maintainer="LSDopen - Stefan Lesicnik (stefan@lsdopen.io)"
 
-ENV LND_SCB_BACKUP_VERSION "v0.2-alpha"
+ENV LND_SCB_BACKUP_VERSION "v0.3-alpha"
 
 ENV LND_SCB_BACKUP_ARCHIVE "${LND_SCB_BACKUP_VERSION}.tar.gz"
 ENV LND_SCB_BACKUP_URL "https://github.com/lsdopen/lnd-scb-backup/archive/${LND_SCB_BACKUP_ARCHIVE}"

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: {{ include "lnd-scb-backup.fullname" . }}-config
+  labels:
+  {{- include "lnd-scb-backup.labels" . | nindent 4 }}
+data:
+  lnd-scb-backup.conf: |-
+    {{ .Files.Get "config/lnd-scb-backup.conf" | b64enc }}
+  readonly.macaroon: |-
+    {{ .Files.Get "config/readonly.macaroon" | b64enc }}
+  tls.cert: |-
+    {{ .Files.Get "config/tls.cert" | b64enc }}

@@ -8,4 +8,6 @@ creds.json
 venv
 k8-unsafe
 lnd-scb-backup.log
-helm-lnd-scb/config/*
+helm-lnd-scb-backup/config/*.cert
+helm-lnd-scb-backup/config/*.conf
+helm-lnd-scb-backup/config/*.macaroon

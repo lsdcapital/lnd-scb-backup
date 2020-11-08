@@ -1,0 +1,19 @@
+[backup]
+datadir=./
+readonlymacaroonpath=/app/readonly.macaroon
+tlscertpath=/app/tls.cert
+lndrpchost=lnd-clusterip
+lndrpcport=10009
+method=file,bucket
+test=0
+loglevel=info
+logfile=lnd-scb-backup.log
+
+[file]
+filepath = /app/backup
+filename = lnd-lsdopen-multichan
+
+[bucket]
+filename = lnd-lsdopen-multichan
+credspath=/app/creds.json
+bucket = lnd-scb-backup

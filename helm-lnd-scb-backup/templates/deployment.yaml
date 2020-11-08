@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "lnd-scb-backup.fullname" . }}
+  labels:
+    {{- include "lnd-scb-backup.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  strategy:
+    type: Recreate  
+  selector:
+    matchLabels:
+      {{- include "lnd-scb-backup.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "lnd-scb-backup.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "lnd-scb-backup.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+          - mountPath: /app/lnd-scb-backup.conf
+            name: lnd-scb-backup
+            subPath: "lnd-scb-backup.conf"
+          - mountPath: /app/tls.cert
+            name: tls-cert
+            subPath: "tls.cert"
+          - mountPath: /app/readonly.macaroon
+            name: readonly-macaroon
+            subPath: "readonly.macaroon"
+          - mountPath: /app/creds.json
+            name: creds-json
+            subPath: "creds.json"
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: readonly-macaroon
+          secret:
+            secretName: lnd-scb-backup-config
+        - name: tls-cert
+          secret:
+            secretName: lnd-scb-backup-config
+        - name: lnd-scb-backup
+          secret:
+            secretName: lnd-scb-backup-config
+        - name: creds-json
+          secret:
+            secretName: lnd-scb-backup-config
